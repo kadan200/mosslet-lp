@@ -25,10 +25,11 @@ const EXCHANGE_RULES = [
 const NOTICES = [
   "ブースをご覧になる際は、お隣のブースにはみ出さないようお願いいたします。",
   "通路を塞がないようご配慮ください。混雑時にはお声がけや列整理をさせていただく場合があります。",
+  "ブース前に待機列が発生した場合は、当方にて整理・誘導いたします。ご協力をお願いいたします。",
   "ブースの撮影は可能ですが、他の参加者様・スタッフ・作者本人が写り込まないようご配慮をお願いいたします。混雑時の撮影はご遠慮ください。",
 ];
 
-// ─── Shared CSS string ───────────────────────────────────────────────────────
+// ─── Shared CSS ───────────────────────────────────────────────────────────────
 const GLOBAL_CSS = `
 :root {
   --font-display: 'DM Serif Display', Georgia, 'Times New Roman', serif;
@@ -74,15 +75,11 @@ body {
 .link-btn { transition: opacity 150ms ease-out; }
 .link-btn:hover { opacity: 0.78; }
 
-/* 厳密な型チェックを回避するためのユーティリティクラス */
-.backdrop-blur {
+.nav-blur {
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
 }
-.text-pretty { text-wrap: pretty; }
-.wrap-anywhere { overflow-wrap: anywhere; }
 
-/* レスポンシブグリッド */
 .hero-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; align-items: flex-end; }
 @media (min-width: 960px) { .hero-grid { grid-template-columns: minmax(0,1.4fr) minmax(0,0.7fr); gap: 4rem; } }
 
@@ -93,7 +90,7 @@ body {
 @media (min-width: 900px) { .exchange-grid { grid-template-columns: minmax(0,1.2fr) minmax(280px,0.8fr); } }
 `;
 
-// ─── Icons ───────────────────────────────────────────────────────────────
+// ─── Icons ────────────────────────────────────────────────────────────────────
 const IconArrow = () => (
   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
     <path d="M7 17L17 7M17 7H7M17 7v10" />
@@ -117,9 +114,7 @@ const IconInfo = () => (
 );
 
 // ─── Primitives ───────────────────────────────────────────────────────────────
-interface BaseProps { children: React.ReactNode; }
-
-const Tag = ({ children }: BaseProps) => (
+const Tag = ({ children }) => (
   <span style={{ display: "inline-flex", alignItems: "center", padding: "3px 12px", borderRadius: "999px", fontSize: "11px", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", background: "var(--sage-bg)", color: "var(--sage)", border: "1px solid var(--sage-border)" }}>
     {children}
   </span>
@@ -129,32 +124,31 @@ const Rule = () => (
   <div aria-hidden="true" style={{ height: "1px", background: "var(--border)", margin: "1.5rem 0 0" }} />
 );
 
-interface SectionHeadProps { eyebrow: string; title: string; id: string; }
-const SectionHead = ({ eyebrow, title, id }: SectionHeadProps) => (
+const SectionHead = ({ eyebrow, title, id }) => (
   <div style={{ marginBottom: "2.5rem" }}>
     <Tag>{eyebrow}</Tag>
-    <h2 id={id} className="wrap-anywhere" style={{ marginTop: "0.75rem", fontFamily: "var(--font-display)", fontWeight: 400, fontSize: "clamp(1.75rem, 4vw, 2.5rem)", lineHeight: 1.15, color: "var(--ink)", wordBreak: "keep-all" }}>
+    <h2 id={id} style={{ marginTop: "0.75rem", fontFamily: "var(--font-display)", fontWeight: 400, fontSize: "clamp(1.75rem, 4vw, 2.5rem)", lineHeight: 1.15, color: "var(--ink)", wordBreak: "keep-all", overflowWrap: "anywhere" }}>
       {title}
     </h2>
     <Rule />
   </div>
 );
 
-interface CardProps { children: React.ReactNode; style?: React.CSSProperties; className?: string; }
-const Card = ({ children, style, className }: CardProps) => (
+const Card = ({ children, style, className }) => (
   <div className={className} style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: "1.5rem", boxShadow: "0 1px 12px rgba(0,0,0,0.05)", ...style }}>
     {children}
   </div>
 );
 
-// ─── Sections ─────────────────────────────────────────────────────────────────
+// ─── Nav ──────────────────────────────────────────────────────────────────────
 const Nav = () => (
-  <nav aria-label="サイトナビゲーション" className="backdrop-blur" style={{ position: "sticky", top: 0, zIndex: 40, display: "flex", alignItems: "center", justifyItems: "space-between", justifyContent: "space-between", padding: "0 clamp(1.5rem, 5vw, 4rem)", height: "3.25rem", background: "rgba(247,245,240,0.88)", borderBottom: "1px solid var(--border)" }}>
+  <nav aria-label="サイトナビゲーション" className="nav-blur" style={{ position: "sticky", top: 0, zIndex: 40, display: "flex", alignItems: "center", justifyItems: "center", justifyContent: "space-between", padding: "0 clamp(1.5rem, 5vw, 4rem)", height: "3.25rem", background: "rgba(247,245,240,0.88)", borderBottom: "1px solid var(--border)" }}>
     <span style={{ fontFamily: "var(--font-display)", fontSize: "1rem", color: "var(--ink)", letterSpacing: "0.01em" }}>mosslet</span>
     <span style={{ fontSize: "11px", color: "var(--muted)", letterSpacing: "0.08em" }}>生成AIなんでも展示会 Vol.5</span>
   </nav>
 );
 
+// ─── Hero ─────────────────────────────────────────────────────────────────────
 const Hero = () => (
   <header style={{ background: "var(--bg)", overflow: "hidden", position: "relative" }}>
     <div aria-hidden="true" style={{ position: "absolute", top: 0, right: 0, width: "min(560px, 80vw)", height: "min(560px, 80vw)", background: "radial-gradient(circle at 65% 25%, rgba(58,97,68,0.08) 0%, transparent 70%)", pointerEvents: "none" }} />
@@ -164,11 +158,11 @@ const Hero = () => (
           Booth Exhibition Notice — mosslet
         </p>
         <h1>
-          <span className="wrap-anywhere" style={{ display: "block", fontFamily: "var(--font-display)", fontWeight: 400, fontSize: "clamp(2.25rem, 5.5vw, 4.5rem)", lineHeight: 1.15, color: "var(--ink)", wordBreak: "keep-all" }}>生成AIなんでも展示会 Vol.5</span>
+          <span style={{ display: "block", fontFamily: "var(--font-display)", fontWeight: 400, fontSize: "clamp(2.25rem, 5.5vw, 4.5rem)", lineHeight: 1.15, color: "var(--ink)", wordBreak: "keep-all", overflowWrap: "break-word" }}>生成AIなんでも展示会 Vol.5</span>
           <span style={{ display: "block", marginTop: "0.5em", fontFamily: "var(--font-body)", fontWeight: 300, fontSize: "clamp(1rem, 2.5vw, 1.375rem)", letterSpacing: "0.06em", color: "var(--muted)" }}>出展のお知らせ</span>
         </h1>
-        <p className="text-pretty" style={{ marginTop: "2rem", fontSize: "clamp(0.9rem, 2vw, 1.0625rem)", lineHeight: 1.9, color: "var(--body)" }}>
-          テーマは<strong style={{ color: "var(--ink)", fontWeight: 600 }}>「作る楽しさを広げる」</strong>。<br/>
+        <p style={{ marginTop: "2rem", fontSize: "clamp(0.9rem, 2vw, 1.0625rem)", lineHeight: 1.9, color: "var(--body)", textWrap: "pretty" }}>
+          テーマは<strong style={{ color: "var(--ink)", fontWeight: 600 }}>「作る楽しさを広げる」</strong>。<br />
           生成AIで制作した全12絵柄のポストカードを展示・販売します。ご来場者とのポストカード交換企画も実施予定です。
         </p>
       </div>
@@ -186,12 +180,13 @@ const Hero = () => (
   </header>
 );
 
+// ─── Purchase ─────────────────────────────────────────────────────────────────
 const PurchaseSection = () => (
   <section aria-labelledby="purchase-heading" style={{ background: "var(--bg)", padding: "clamp(4rem, 8vw, 7rem) clamp(1.5rem, 5vw, 4rem)" }}>
     <div style={{ maxWidth: "72rem", margin: "0 auto" }}>
       <SectionHead eyebrow="Exhibition & Sales" title="展示・販売について" id="purchase-heading" />
-      <div style={{ maxWidth: "48rem" }}>
-        <p className="text-pretty" style={{ fontSize: "0.9375rem", lineHeight: 1.9, color: "var(--body)", marginBottom: "1.75rem" }}>
+      <div>
+        <p style={{ fontSize: "0.9375rem", lineHeight: 1.9, color: "var(--body)", marginBottom: "1.75rem", textWrap: "pretty" }}>
           当ブースでは、展示しているポストカードをその場でご購入いただけます。
         </p>
         <div className="pricing-grid" style={{ marginBottom: "1rem" }}>
@@ -209,7 +204,7 @@ const PurchaseSection = () => (
           <IconInfo />
           <div>
             <h3 style={{ fontSize: "0.8125rem", fontWeight: 600, marginBottom: "0.375rem" }}>お支払いについて</h3>
-            <p className="text-pretty" style={{ fontSize: "0.8125rem", lineHeight: 1.85, color: "var(--ink)" }}>お支払いは<strong style={{ fontWeight: 600 }}> 現金のみ </strong>です。小銭や千円札でのお支払いにご協力いただけますと助かります。</p>
+            <p style={{ fontSize: "0.8125rem", lineHeight: 1.85, color: "var(--ink)", textWrap: "pretty" }}>お支払いは<strong style={{ fontWeight: 600 }}> 現金のみ </strong>です。小銭や千円札でのお支払いにご協力いただけますと助かります。</p>
           </div>
         </div>
       </div>
@@ -217,13 +212,14 @@ const PurchaseSection = () => (
   </section>
 );
 
+// ─── Exchange ─────────────────────────────────────────────────────────────────
 const ExchangeSection = () => (
   <section aria-labelledby="exchange-heading" style={{ background: "var(--bg-alt)", padding: "clamp(4rem, 8vw, 7rem) clamp(1.5rem, 5vw, 4rem)" }}>
     <div style={{ maxWidth: "72rem", margin: "0 auto" }}>
       <SectionHead eyebrow="Card Exchange" title="ポストカード交換企画" id="exchange-heading" />
       <div className="exchange-grid">
         <div>
-          <p className="text-pretty" style={{ fontSize: "0.9375rem", lineHeight: 1.9, color: "var(--body)", marginBottom: "1.75rem", maxWidth: "44ch" }}>
+          <p style={{ fontSize: "0.9375rem", lineHeight: 1.9, color: "var(--body)", marginBottom: "1.75rem", textWrap: "pretty" }}>
             「作る楽しさを広げる」試みとして、ご自身で制作したポストカードとの交換企画を行います。ブース内限定の小さな交換企画です。
           </p>
           <Card style={{ padding: "clamp(1.25rem, 3vw, 2rem)" }}>
@@ -232,16 +228,29 @@ const ExchangeSection = () => (
               {EXCHANGE_RULES.map((rule, i) => (
                 <li key={i} style={{ display: "flex", gap: "0.875rem", alignItems: "flex-start" }}>
                   <span aria-hidden="true" style={{ flexShrink: 0, display: "inline-flex", alignItems: "center", justifyContent: "center", width: "1.375rem", height: "1.375rem", borderRadius: "50%", background: "var(--sage-bg)", color: "var(--sage)", fontSize: "10px", fontWeight: 700, fontVariantNumeric: "tabular-nums", marginTop: "2px" }}>{i + 1}</span>
-                  <span className="text-pretty" style={{ fontSize: "0.875rem", lineHeight: 1.85, color: "var(--body)" }}>{rule}</span>
+                  <span style={{ fontSize: "0.875rem", lineHeight: 1.85, color: "var(--body)", textWrap: "pretty" }}>{rule}</span>
                 </li>
               ))}
             </ul>
           </Card>
         </div>
+        
+        {/* 右カラム */}
         <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+          {/* ご注意文を最上部へ配置 */}
+          <div role="note" style={{ background: "var(--amber-bg)", border: "1px solid var(--amber-border)", borderRadius: "1.5rem", padding: "1.25rem 1.5rem", display: "flex", gap: "0.75rem", color: "var(--amber-text)" }}>
+            <IconWarn />
+            <div>
+              <h3 style={{ fontSize: "0.8125rem", fontWeight: 600, marginBottom: "0.375rem" }}>ご注意</h3>
+              <p style={{ fontSize: "0.8125rem", lineHeight: 1.85, textWrap: "pretty" }}>この企画は<strong style={{ fontWeight: 600 }}> mosslet </strong>ブース限定です。来場者同士での交換・配布や、他サークル様への交換交渉はご遠慮ください。</p>
+            </div>
+          </div>
+
+          {/* テンプレートカセット */}
           <Card style={{ padding: "1.5rem" }}>
             <h3 style={{ fontSize: "0.875rem", fontWeight: 600, color: "var(--ink)", marginBottom: "0.625rem" }}>交換用カードがない方へ</h3>
-            <p className="text-pretty" style={{ fontSize: "0.8125rem", lineHeight: 1.85, color: "var(--body)", marginBottom: "1rem" }}>ご自身の画像でコンビニ印刷できるネットプリント用Canvaテンプレートをご用意しています。</p>
+            <p style={{ fontSize: "0.8125rem", lineHeight: 1.85, color: "var(--body)", marginBottom: "1rem", textWrap: "pretty" }}>ご自身の画像でコンビニ印刷できるネットプリント用Canvaテンプレートをご用意しています。</p>
+            
             <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
               <a href="https://canva.link/z0sz1nkhmn14nud" target="_blank" rel="noopener noreferrer" className="link-btn" style={{ display: "inline-flex", alignItems: "center", gap: "6px", padding: "8px 16px", borderRadius: "999px", fontSize: "0.8125rem", fontWeight: 500, background: "var(--ink)", color: "#fff", textDecoration: "none" }}>
                 ポストカード縦型テンプレートを取得 <IconArrow />
@@ -250,31 +259,47 @@ const ExchangeSection = () => (
                 ポストカード横型テンプレートを取得 <IconArrow />
               </a>
             </div>
-          </Card>
-          <div role="note" style={{ background: "var(--amber-bg)", border: "1px solid var(--amber-border)", borderRadius: "1.5rem", padding: "1.25rem 1.5rem", display: "flex", gap: "0.75rem", color: "var(--amber-text)" }}>
-            <IconWarn />
-            <div>
-              <h3 style={{ fontSize: "0.8125rem", fontWeight: 600, marginBottom: "0.375rem" }}>ご注意</h3>
-              <p className="text-pretty" style={{ fontSize: "0.8125rem", lineHeight: 1.85 }}>この企画は<strong style={{ fontWeight: 600 }}> mosslet </strong>ブース限定です。来場者同士での交換・配布や、他サークル様への交換交渉はご遠慮ください。</p>
+
+            <div style={{ marginTop: "1.5rem", borderTop: "1px solid var(--border)", paddingTop: "1.25rem" }}>
+              <h4 style={{ fontSize: "0.8125rem", fontWeight: 600, color: "var(--ink)", marginBottom: "0.5rem" }}>【テンプレートの使い方】</h4>
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.375rem", marginBottom: "1.25rem" }}>
+                {[
+                  "ご自身で生成・制作した画像をフレーム内に配置します。",
+                  "下部のテキスト（Crafted by your name | X: @your name）をご自身の名義・Xアカウントに変更します。",
+                  "画像をPDF（印刷用）でダウンロードし、ネットプリントに登録します。"
+                ].map((text, index) => (
+                  <div key={index} style={{ display: "flex", gap: "0.375rem", alignItems: "flex-start" }}>
+                    <span style={{ fontSize: "0.8125rem", lineHeight: 1.85, color: "var(--body)", fontWeight: 600, fontVariantNumeric: "tabular-nums" }}>{index + 1}.</span>
+                    <span style={{ fontSize: "0.8125rem", lineHeight: 1.85, color: "var(--body)" }}>{text}</span>
+                  </div>
+                ))}
+              </div>
+
+              <h4 style={{ fontSize: "0.8125rem", fontWeight: 600, color: "var(--ink)", marginBottom: "0.5rem" }}>【コンビニ印刷時のご注意】</h4>
+              <p style={{ fontSize: "0.8125rem", lineHeight: 1.85, color: "var(--body)", textWrap: "pretty" }}>
+                コンビニのコピー機は端まで印刷（フチなし印刷）ができないため、テンプレートはあらかじめ余白分を計算したデザインになっています。<br />
+                印刷設定では「小さめ」などの縮小機能は選ばず、必ず<strong style={{ color: "var(--ink)", fontWeight: 600 }}>「そのままのサイズ（原寸）」</strong>で印刷してください。
+              </p>
             </div>
-          </div>
+          </Card>
         </div>
       </div>
     </div>
   </section>
 );
 
+// ─── Notices ──────────────────────────────────────────────────────────────────
 const NoticesSection = () => (
   <section aria-labelledby="notice-heading" style={{ background: "var(--bg)", padding: "clamp(4rem, 8vw, 7rem) clamp(1.5rem, 5vw, 4rem)" }}>
     <div style={{ maxWidth: "72rem", margin: "0 auto" }}>
       <SectionHead eyebrow="Notes & Reminders" title="当日のお願い" id="notice-heading" />
-      <Card style={{ padding: "clamp(1.5rem, 4vw, 2.5rem)", maxWidth: "48rem" }}>
-        <p className="text-pretty" style={{ fontSize: "0.875rem", lineHeight: 1.9, color: "var(--body)", marginBottom: "1.5rem" }}>半スペースでの出展のため、当日は以下にご協力をお願いいたします。</p>
+      <Card style={{ padding: "clamp(1.5rem, 4vw, 2.5rem)" }}>
+        <p style={{ fontSize: "0.875rem", lineHeight: 1.9, color: "var(--body)", marginBottom: "1.5rem", textWrap: "pretty" }}>半スペースでの出展のため、当日は以下にご協力をお願いいたします。</p>
         <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "1rem" }}>
           {NOTICES.map((notice, i) => (
             <li key={i} style={{ display: "flex", gap: "0.875rem", alignItems: "flex-start" }}>
               <span aria-hidden="true" style={{ flexShrink: 0, width: "6px", height: "6px", borderRadius: "50%", background: "var(--muted)", marginTop: "0.6rem" }} />
-              <span className="text-pretty" style={{ fontSize: "0.875rem", lineHeight: 1.9, color: "var(--body)" }}>{notice}</span>
+              <span style={{ fontSize: "0.875rem", lineHeight: 1.9, color: "var(--body)", textWrap: "pretty" }}>{notice}</span>
             </li>
           ))}
         </ul>
@@ -283,6 +308,7 @@ const NoticesSection = () => (
   </section>
 );
 
+// ─── Footer ───────────────────────────────────────────────────────────────────
 const Footer = () => (
   <footer style={{ background: "var(--ink)", color: "rgba(247,245,240,0.9)", padding: "clamp(3.5rem, 7vw, 5.5rem) clamp(1.5rem, 5vw, 4rem)" }}>
     <div style={{ maxWidth: "72rem", margin: "0 auto" }}>
@@ -298,6 +324,7 @@ const Footer = () => (
   </footer>
 );
 
+// ─── App ──────────────────────────────────────────────────────────────────────
 export default function App() {
   return (
     <>
@@ -305,6 +332,9 @@ export default function App() {
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       <link href={FONT_URL} rel="stylesheet" />
       <style>{GLOBAL_CSS}</style>
+      <a href="#main-content" style={{ position: "absolute", left: "-9999px", top: "1rem", zIndex: 9999, padding: "0.5rem 1rem", background: "var(--sage)", color: "#fff", borderRadius: "4px", fontSize: "0.875rem", textDecoration: "none" }} onFocus={(e) => { e.currentTarget.style.left = "1rem"; }} onBlur={(e) => { e.currentTarget.style.left = "-9999px"; }}>
+        メインコンテンツへスキップ
+      </a>
       <Nav />
       <main id="main-content">
         <Hero />

@@ -312,9 +312,19 @@ const NoticesSection = () => (
 const Footer = () => (
   <footer style={{ background: "var(--ink)", color: "rgba(247,245,240,0.9)", padding: "clamp(3.5rem, 7vw, 5.5rem) clamp(1.5rem, 5vw, 4rem)" }}>
     <div style={{ maxWidth: "72rem", margin: "0 auto" }}>
-      <p style={{ fontFamily: "var(--font-display)", fontSize: "clamp(1.75rem, 5vw, 3rem)", lineHeight: 1.25, marginBottom: "2rem" }}>
-        見るだけでも、<br />交換だけでも、<br /><span style={{ opacity: 0.5 }}>購入だけでも歓迎です。</span>
-      </p>
+      <div style={{ display: "flex", flexDirection: "column", gap: "2.5rem", marginBottom: "2.5rem" }}>
+        <p style={{ fontFamily: "var(--font-display)", fontSize: "clamp(1.75rem, 5vw, 3rem)", lineHeight: 1.25 }}>
+          見るだけでも、<br />交換だけでも、<br /><span style={{ opacity: 0.5 }}>購入だけでも歓迎です。</span>
+        </p>
+        <div style={{ display: "flex", gap: "1.5rem", flexWrap: "wrap" }}>
+          <a href="https://x.com/kadan_niwa" target="_blank" rel="noopener noreferrer" className="link-btn" style={{ color: "#fff", textDecoration: "none", fontSize: "0.9375rem", fontWeight: 500, display: "inline-flex", alignItems: "center", gap: "0.375rem" }}>
+            X (Twitter) <IconArrow />
+          </a>
+          <a href="https://beacons.ai/kadan" target="_blank" rel="noopener noreferrer" className="link-btn" style={{ color: "#fff", textDecoration: "none", fontSize: "0.9375rem", fontWeight: 500, display: "inline-flex", alignItems: "center", gap: "0.375rem" }}>
+            Beacons <IconArrow />
+          </a>
+        </div>
+      </div>
       <div aria-hidden="true" style={{ height: "1px", background: "rgba(255,255,255,0.1)", marginBottom: "1.75rem" }} />
       <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem 2rem", justifyContent: "space-between", alignItems: "center" }}>
         <p style={{ fontSize: "0.8125rem", opacity: 0.45 }}>（ブース番号確定後に更新予定）/ mosslet にてお待ちしております</p>

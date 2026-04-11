@@ -73,6 +73,10 @@ body {
   }
 }
 
+.text-pretty {
+  text-wrap: pretty;
+}
+
 .link-btn { transition: opacity 150ms ease-out; }
 .link-btn:hover { opacity: 0.78; }
 
@@ -162,7 +166,7 @@ const Hero = () => (
           <span style={{ display: "block", fontFamily: "var(--font-display)", fontWeight: 400, fontSize: "clamp(2.25rem, 5.5vw, 4.5rem)", lineHeight: 1.15, color: "var(--ink)", wordBreak: "keep-all", overflowWrap: "break-word" }}>生成AIなんでも展示会 Vol.5</span>
           <span style={{ display: "block", marginTop: "0.5em", fontFamily: "var(--font-body)", fontWeight: 300, fontSize: "clamp(1rem, 2.5vw, 1.375rem)", letterSpacing: "0.06em", color: "var(--muted)" }}>出展のお知らせ</span>
         </h1>
-        <p style={{ marginTop: "2rem", fontSize: "clamp(0.9rem, 2vw, 1.0625rem)", lineHeight: 1.9, color: "var(--body)", textWrap: "pretty" } as React.CSSProperties}>
+        <p className="text-pretty" style={{ marginTop: "2rem", fontSize: "clamp(0.9rem, 2vw, 1.0625rem)", lineHeight: 1.9, color: "var(--body)" }}>
           テーマは<strong style={{ color: "var(--ink)", fontWeight: 600 }}>「作る楽しさを広げる」</strong>。<br />
           生成AIで制作した全12絵柄のポストカードを展示・販売します。ご来場者とのポストカード交換企画も実施予定です。
         </p>
@@ -187,7 +191,7 @@ const PurchaseSection = () => (
     <div style={{ maxWidth: "72rem", margin: "0 auto" }}>
       <SectionHead eyebrow="Exhibition & Sales" title="展示・販売について" id="purchase-heading" />
       <div>
-        <p style={{ fontSize: "0.9375rem", lineHeight: 1.9, color: "var(--body)", marginBottom: "1.75rem", textWrap: "pretty" } as React.CSSProperties}>
+        <p className="text-pretty" style={{ fontSize: "0.9375rem", lineHeight: 1.9, color: "var(--body)", marginBottom: "1.75rem" }}>
           当ブースでは、展示しているポストカードをその場でご購入いただけます。
         </p>
         <div className="pricing-grid" style={{ marginBottom: "1rem" }}>
@@ -205,7 +209,7 @@ const PurchaseSection = () => (
           <IconInfo />
           <div>
             <h3 style={{ fontSize: "0.8125rem", fontWeight: 600, marginBottom: "0.375rem" }}>お支払いについて</h3>
-            <p style={{ fontSize: "0.8125rem", lineHeight: 1.85, color: "var(--ink)", textWrap: "pretty" } as React.CSSProperties}>お支払いは<strong style={{ fontWeight: 600 }}> 現金のみ </strong>です。小銭や千円札でのお支払いにご協力いただけますと助かります。</p>
+            <p className="text-pretty" style={{ fontSize: "0.8125rem", lineHeight: 1.85, color: "var(--ink)" }}>お支払いは<strong style={{ fontWeight: 600 }}> 現金のみ </strong>です。小銭や千円札でのお支払いにご協力いただけますと助かります。</p>
           </div>
         </div>
       </div>
@@ -220,7 +224,7 @@ const ExchangeSection = () => (
       <SectionHead eyebrow="Card Exchange" title="ポストカード交換企画" id="exchange-heading" />
       <div className="exchange-grid">
         <div>
-          <p style={{ fontSize: "0.9375rem", lineHeight: 1.9, color: "var(--body)", marginBottom: "1.75rem", textWrap: "pretty" } as React.CSSProperties}>
+          <p className="text-pretty" style={{ fontSize: "0.9375rem", lineHeight: 1.9, color: "var(--body)", marginBottom: "1.75rem" }}>
             「作る楽しさを広げる」試みとして、ご自身で制作したポストカードとの交換企画を行います。ブース内限定の小さな交換企画です。
           </p>
           <Card style={{ padding: "clamp(1.25rem, 3vw, 2rem)" }}>
@@ -229,7 +233,7 @@ const ExchangeSection = () => (
               {EXCHANGE_RULES.map((rule, i) => (
                 <li key={i} style={{ display: "flex", gap: "0.875rem", alignItems: "flex-start" }}>
                   <span aria-hidden="true" style={{ flexShrink: 0, display: "inline-flex", alignItems: "center", justifyContent: "center", width: "1.375rem", height: "1.375rem", borderRadius: "50%", background: "var(--sage-bg)", color: "var(--sage)", fontSize: "10px", fontWeight: 700, fontVariantNumeric: "tabular-nums", marginTop: "2px" }}>{i + 1}</span>
-                  <span style={{ fontSize: "0.875rem", lineHeight: 1.85, color: "var(--body)", textWrap: "pretty" } as React.CSSProperties}>{rule}</span>
+                  <span className="text-pretty" style={{ fontSize: "0.875rem", lineHeight: 1.85, color: "var(--body)" }}>{rule}</span>
                 </li>
               ))}
             </ul>
@@ -242,13 +246,13 @@ const ExchangeSection = () => (
             <IconWarn />
             <div>
               <h3 style={{ fontSize: "0.8125rem", fontWeight: 600, marginBottom: "0.375rem" }}>ご注意</h3>
-              <p style={{ fontSize: "0.8125rem", lineHeight: 1.85, textWrap: "pretty" } as React.CSSProperties}>この企画は<strong style={{ fontWeight: 600 }}> mosslet </strong>ブース限定です。来場者同士での交換・配布や、他サークル様への交換交渉はご遠慮ください。</p>
+              <p className="text-pretty" style={{ fontSize: "0.8125rem", lineHeight: 1.85 }}>この企画は<strong style={{ fontWeight: 600 }}> mosslet </strong>ブース限定です。来場者同士での交換・配布や、他サークル様への交換交渉はご遠慮ください。</p>
             </div>
           </div>
 
           <Card style={{ padding: "1.5rem" }}>
             <h3 style={{ fontSize: "0.875rem", fontWeight: 600, color: "var(--ink)", marginBottom: "0.625rem" }}>交換用カードがない方へ</h3>
-            <p style={{ fontSize: "0.8125rem", lineHeight: 1.85, color: "var(--body)", marginBottom: "1rem", textWrap: "pretty" } as React.CSSProperties}>ご自身の画像でコンビニ印刷できるネットプリント用Canvaテンプレートをご用意しています。</p>
+            <p className="text-pretty" style={{ fontSize: "0.8125rem", lineHeight: 1.85, color: "var(--body)", marginBottom: "1rem" }}>ご自身の画像でコンビニ印刷できるネットプリント用Canvaテンプレートをご用意しています。</p>
             
             <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
               <a href="https://canva.link/z0sz1nkhmn14nud" target="_blank" rel="noopener noreferrer" className="link-btn" style={{ display: "inline-flex", alignItems: "center", gap: "6px", padding: "8px 16px", borderRadius: "999px", fontSize: "0.8125rem", fontWeight: 500, background: "var(--ink)", color: "#fff", textDecoration: "none" }}>
@@ -275,7 +279,7 @@ const ExchangeSection = () => (
               </div>
 
               <h4 style={{ fontSize: "0.8125rem", fontWeight: 600, color: "var(--ink)", marginBottom: "0.5rem" }}>【コンビニ印刷時のご注意】</h4>
-              <p style={{ fontSize: "0.8125rem", lineHeight: 1.85, color: "var(--body)", textWrap: "pretty" } as React.CSSProperties}>
+              <p className="text-pretty" style={{ fontSize: "0.8125rem", lineHeight: 1.85, color: "var(--body)" }}>
                 コンビニのコピー機は端まで印刷（フチなし印刷）ができないため、テンプレートはあらかじめ余白分を計算したデザインになっています。<br />
                 印刷設定では「小さめ」などの縮小機能は選ばず、必ず<strong style={{ color: "var(--ink)", fontWeight: 600 }}>「そのままのサイズ（原寸）」</strong>で印刷してください。
               </p>
@@ -293,12 +297,12 @@ const NoticesSection = () => (
     <div style={{ maxWidth: "72rem", margin: "0 auto" }}>
       <SectionHead eyebrow="Notes & Reminders" title="当日のお願い" id="notice-heading" />
       <Card style={{ padding: "clamp(1.5rem, 4vw, 2.5rem)" }}>
-        <p style={{ fontSize: "0.875rem", lineHeight: 1.9, color: "var(--body)", marginBottom: "1.5rem", textWrap: "pretty" } as React.CSSProperties}>半スペースでの出展のため、当日は以下にご協力をお願いいたします。</p>
+        <p className="text-pretty" style={{ fontSize: "0.875rem", lineHeight: 1.9, color: "var(--body)", marginBottom: "1.5rem" }}>半スペースでの出展のため、当日は以下にご協力をお願いいたします。</p>
         <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "1rem" }}>
           {NOTICES.map((notice, i) => (
             <li key={i} style={{ display: "flex", gap: "0.875rem", alignItems: "flex-start" }}>
               <span aria-hidden="true" style={{ flexShrink: 0, width: "6px", height: "6px", borderRadius: "50%", background: "var(--muted)", marginTop: "0.6rem" }} />
-              <span style={{ fontSize: "0.875rem", lineHeight: 1.9, color: "var(--body)", textWrap: "pretty" } as React.CSSProperties}>{notice}</span>
+              <span className="text-pretty" style={{ fontSize: "0.875rem", lineHeight: 1.9, color: "var(--body)" }}>{notice}</span>
             </li>
           ))}
         </ul>
@@ -321,6 +325,9 @@ const Footer = () => (
           </a>
           <a href="https://beacons.ai/kadan" target="_blank" rel="noopener noreferrer" className="link-btn" style={{ color: "#fff", textDecoration: "none", fontSize: "0.9375rem", fontWeight: 500, display: "inline-flex", alignItems: "center", gap: "0.375rem" }}>
             Beacons <IconArrow />
+          </a>
+          <a href="https://www.genai-expo.com/" target="_blank" rel="noopener noreferrer" className="link-btn" style={{ color: "#fff", textDecoration: "none", fontSize: "0.9375rem", fontWeight: 500, display: "inline-flex", alignItems: "center", gap: "0.375rem" }}>
+            公式サイト <IconArrow />
           </a>
         </div>
       </div>

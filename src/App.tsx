@@ -7,7 +7,8 @@ const FONT_URL = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fami
 const EVENT_META = [
   { label: "開催日", value: "2026年5月6日（水・振休）" },
   { label: "時間",   value: "12:30 - 18:00" },
-  { label: "ブース", value: "（ブース番号確定後に更新予定）/ mosslet" },
+  { label: "会場",   value: "すみだ産業会館 8F サンライズホール (錦糸町駅 徒歩1分)" },
+  { label: "ブース", value: "え-10 / mosslet" },
 ];
 
 const PRICING = [
@@ -237,7 +238,6 @@ const ExchangeSection = () => (
         
         {/* 右カラム */}
         <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-          {/* ご注意文を最上部へ配置 */}
           <div role="note" style={{ background: "var(--amber-bg)", border: "1px solid var(--amber-border)", borderRadius: "1.5rem", padding: "1.25rem 1.5rem", display: "flex", gap: "0.75rem", color: "var(--amber-text)" }}>
             <IconWarn />
             <div>
@@ -246,7 +246,6 @@ const ExchangeSection = () => (
             </div>
           </div>
 
-          {/* テンプレートカセット */}
           <Card style={{ padding: "1.5rem" }}>
             <h3 style={{ fontSize: "0.875rem", fontWeight: 600, color: "var(--ink)", marginBottom: "0.625rem" }}>交換用カードがない方へ</h3>
             <p style={{ fontSize: "0.8125rem", lineHeight: 1.85, color: "var(--body)", marginBottom: "1rem", textWrap: "pretty" } as React.CSSProperties}>ご自身の画像でコンビニ印刷できるネットプリント用Canvaテンプレートをご用意しています。</p>
@@ -325,9 +324,27 @@ const Footer = () => (
           </a>
         </div>
       </div>
+
+      <div style={{ marginBottom: "2.5rem", borderRadius: "1rem", overflow: "hidden", border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.02)" }}>
+        <iframe
+          title="Google Maps: すみだ産業会館"
+          src="https://maps.google.co.jp/maps?q=東京都墨田区向島3丁目36-7+すみだ産業会館&output=embed"
+          width="100%"
+          height="320"
+          style={{ border: 0, display: "block" }}
+          allowFullScreen
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+        ></iframe>
+        <div style={{ padding: "1.25rem" }}>
+          <p style={{ fontSize: "0.9375rem", color: "#fff", marginBottom: "0.375rem", fontWeight: 500 }}>すみだ産業会館 8F サンライズホール (錦糸町駅 徒歩1分)</p>
+          <p style={{ fontSize: "0.8125rem", opacity: 0.7 }}>〒131-0033 東京都墨田区向島3丁目36-7</p>
+        </div>
+      </div>
+
       <div aria-hidden="true" style={{ height: "1px", background: "rgba(255,255,255,0.1)", marginBottom: "1.75rem" }} />
       <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem 2rem", justifyContent: "space-between", alignItems: "center" }}>
-        <p style={{ fontSize: "0.8125rem", opacity: 0.45 }}>（ブース番号確定後に更新予定）/ mosslet にてお待ちしております</p>
+        <p style={{ fontSize: "0.8125rem", opacity: 0.45 }}>え-10 / mosslet にてお待ちしております</p>
         <p style={{ fontSize: "11px", opacity: 0.25 }}>© 2026 mosslet</p>
       </div>
     </div>

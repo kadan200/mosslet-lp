@@ -30,6 +30,37 @@ const NOTICES = [
   "ブースの撮影は可能ですが、他の参加者様・スタッフ・作者本人が写り込まないようご配慮をお願いいたします。混雑時の撮影はご遠慮ください。",
 ];
 
+const MENU_ITEMS = [
+  {
+    title: "野原にて",
+    subtitle: "Where Wildflowers Keep Their Secrets",
+    desc: "野の花が秘密を守る場所。\n少女たちは、まだ名前のない季節の中で微笑む。",
+    tag: "",
+    images: ["/images/1-01.png", "/images/1-02.png", "/images/1-03.png"]
+  },
+  {
+    title: "幸福の訪れを告げる",
+    subtitle: "A Whisper Carried on Blue Wings",
+    desc: "青い羽が運ぶのは、春の訪れの気配。\n言葉にならないやさしい知らせ。",
+    tag: "",
+    images: ["/images/2-01.png", "/images/2-02.png", "/images/2-03.png"]
+  },
+  {
+    title: "別れを飛び越えて",
+    subtitle: "Beyond the Garden of Farewells",
+    desc: "別れは終わりではなく、やわらかな通う道。\n花の園を越えた先で、また巡り会うために。",
+    tag: "",
+    images: ["/images/3-01.png", "/images/3-02.png", "/images/3-04.png"]
+  },
+  {
+    title: "なんかいい",
+    subtitle: "Small Comforts in Quiet Afternoons",
+    desc: "ぬくもりは、ささやかな時間の中にある。\n甘いものと、少しの夢。",
+    tag: "なんかいい展2 人気シリーズ",
+    images: ["/images/4-01.png", "/images/4-02.png", "/images/4-03.png"]
+  }
+];
+
 // ─── Shared CSS ───────────────────────────────────────────────────────────────
 const GLOBAL_CSS = `
 :root {
@@ -93,6 +124,19 @@ body {
 
 .exchange-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; }
 @media (min-width: 900px) { .exchange-grid { grid-template-columns: minmax(0,1.2fr) minmax(280px,0.8fr); } }
+
+.menu-row { display: grid; grid-template-columns: 1fr; gap: 2rem; padding-bottom: 3.5rem; margin-bottom: 3.5rem; border-bottom: 1px solid var(--border); }
+@media (min-width: 768px) { .menu-row { grid-template-columns: minmax(0, 1fr) minmax(0, 2.5fr); gap: 3rem; } }
+
+/* 写真のグリッド設定（スマホ時は1列、PC時は3列） */
+.menu-images { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+@media (min-width: 640px) { .menu-images { grid-template-columns: repeat(3, 1fr); } }
+
+.aspect-portrait { aspect-ratio: 2 / 3; background: rgba(0,0,0,0.03); border: 1px solid var(--border); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; font-size: 0.8125rem; color: var(--muted); overflow: hidden; }
+.aspect-square { aspect-ratio: 1 / 1; background: var(--card); border: 1px solid var(--border); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; color: var(--muted); overflow: hidden; }
+
+.canvas-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+@media (min-width: 640px) { .canvas-grid { grid-template-columns: repeat(4, 1fr); } }
 `;
 
 // ─── Icons ────────────────────────────────────────────────────────────────────
@@ -185,6 +229,80 @@ const Hero = () => (
   </header>
 );
 
+// ─── Menu ─────────────────────────────────────────────────────────────────────
+const MenuSection = () => (
+  <section aria-labelledby="menu-heading" style={{ background: "var(--bg-alt)", padding: "clamp(4rem, 8vw, 7rem) clamp(1.5rem, 5vw, 4rem)", borderTop: "1px solid var(--border)" }}>
+    <div style={{ maxWidth: "72rem", margin: "0 auto" }}>
+      <SectionHead eyebrow="Whispers of Spring Collection" title="お品書き" id="menu-heading" />
+      
+      <div style={{ marginBottom: "3rem" }}>
+        <h3 style={{ fontSize: "1.125rem", fontWeight: 600, color: "var(--ink)", marginBottom: "0.5rem" }}>Whispers of Spring and Fur Postcard Collection</h3>
+        <p style={{ fontSize: "0.9375rem", color: "var(--body)" }}>5月の花々と動物要素を持つ少女たちをテーマにしたポストカード</p>
+      </div>
+
+      <div>
+        {MENU_ITEMS.map((item, index) => (
+          <div key={index} className="menu-row">
+            <div>
+              <h4 style={{ fontSize: "1.125rem", fontWeight: 600, color: "var(--ink)", marginBottom: "0.25rem" }}>{item.title}</h4>
+              <p style={{ fontSize: "0.6875rem", fontWeight: 600, color: "var(--muted)", letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: "1rem" }}>{item.subtitle}</p>
+              
+              {item.tag && (
+                <span style={{ display: "inline-block", fontSize: "0.6875rem", fontWeight: 600, color: "var(--body)", border: "1px solid var(--border)", padding: "2px 8px", borderRadius: "4px", marginBottom: "1rem", background: "var(--card)" }}>
+                  {item.tag}
+                </span>
+              )}
+              
+              <p className="text-pretty" style={{ fontSize: "0.875rem", lineHeight: 1.85, color: "var(--body)", whiteSpace: "pre-wrap" }}>
+                {item.desc}
+              </p>
+            </div>
+            <div className="menu-images">
+              {item.images.map((img, i) => (
+                <div key={i} className="aspect-portrait">
+                  <img 
+                    src={img} 
+                    alt="" 
+                    style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} 
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+
+        <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: "1.5rem", padding: "clamp(1.5rem, 4vw, 2.5rem)" }}>
+          <div className="menu-row" style={{ borderBottom: "none", paddingBottom: 0, marginBottom: 0 }}>
+            <div>
+              <h4 style={{ fontSize: "1.125rem", fontWeight: 600, color: "var(--ink)", marginBottom: "0.5rem" }}>Fragments of a Printing Study</h4>
+              <p className="text-pretty" style={{ fontSize: "0.875rem", lineHeight: 1.85, color: "var(--body)", marginBottom: "1rem" }}>
+                UV印刷によるキャンバス作品。<br />下地や発色の違いを試しながら、表現の可能性を探りました。
+              </p>
+              <span style={{ display: "inline-block", fontSize: "0.6875rem", fontWeight: 700, color: "var(--ink)", border: "1px solid var(--ink)", padding: "2px 8px", borderRadius: "4px" }}>
+                ※展示のみ
+              </span>
+            </div>
+            <div className="canvas-grid">
+              <div className="aspect-square">
+                <img src="/images/5-01.png" alt="Canvas 1" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+              </div>
+              <div className="aspect-square">
+                <img src="/images/5-02.png" alt="Canvas 2" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+              </div>
+              <div className="aspect-square">
+                <img src="/images/5-03.png" alt="Canvas 3" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+              </div>
+              <div className="aspect-square">
+                <img src="/images/5-04.png" alt="Canvas 4" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
 // ─── Purchase ─────────────────────────────────────────────────────────────────
 const PurchaseSection = () => (
   <section aria-labelledby="purchase-heading" style={{ background: "var(--bg)", padding: "clamp(4rem, 8vw, 7rem) clamp(1.5rem, 5vw, 4rem)" }}>
@@ -240,7 +358,6 @@ const ExchangeSection = () => (
           </Card>
         </div>
         
-        {/* 右カラム */}
         <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
           <div role="note" style={{ background: "var(--amber-bg)", border: "1px solid var(--amber-border)", borderRadius: "1.5rem", padding: "1.25rem 1.5rem", display: "flex", gap: "0.75rem", color: "var(--amber-text)" }}>
             <IconWarn />
@@ -372,6 +489,7 @@ export default function App() {
       <Nav />
       <main id="main-content">
         <Hero />
+        <MenuSection />
         <PurchaseSection />
         <ExchangeSection />
         <NoticesSection />

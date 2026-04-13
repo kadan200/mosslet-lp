@@ -234,7 +234,7 @@ const IconInfo = () => (
 );
 
 // ─── Primitives ───
-const Tag = ({ children }) => (
+const Tag = ({ children }: { children: React.ReactNode }) => (
   <span style={{ display: "inline-flex", alignItems: "center", padding: "3px 12px", borderRadius: "999px", fontSize: "11px", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", background: "var(--sage-bg)", color: "var(--sage)", border: "1px solid var(--sage-border)" }}>
     {children}
   </span>
@@ -242,7 +242,7 @@ const Tag = ({ children }) => (
 
 const Rule = () => <div aria-hidden="true" style={{ height: "1px", background: "var(--border)", margin: "1.5rem 0 0" }} />;
 
-const SectionHead = ({ eyebrow, title, id }) => (
+const SectionHead = ({ eyebrow, title, id }: { eyebrow: string; title: string; id: string }) => (
   <div style={{ marginBottom: "2.5rem" }}>
     <Tag>{eyebrow}</Tag>
     <h2 id={id} style={{ marginTop: "0.75rem", fontFamily: "var(--font-display)", fontWeight: 400, fontSize: "clamp(1.75rem, 4vw, 2.5rem)", lineHeight: 1.15, color: "var(--ink)", wordBreak: "keep-all", overflowWrap: "anywhere" }}>
@@ -252,7 +252,7 @@ const SectionHead = ({ eyebrow, title, id }) => (
   </div>
 );
 
-const Card = ({ children, style, className }) => (
+const Card = ({ children, style, className }: { children: React.ReactNode; style?: React.CSSProperties; className?: string }) => (
   <div className={className} style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: "1.5rem", boxShadow: "0 1px 12px rgba(0,0,0,0.05)", ...style }}>
     {children}
   </div>

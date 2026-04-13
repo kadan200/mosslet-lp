@@ -1,8 +1,8 @@
 import React from "react";
 
 // ─── Google Fonts ─────────────────────────────────────────────────────────────
-const FONT_URL = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap";
-
+// 見出しにAlegreya、本文に引き続きDM Sansを使用する場合
+const FONT_URL = "https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap";
 // ─── Data ─────────────────────────────────────────────────────────────────────
 const EVENT_META = [
   { label: "開催日", value: "2026年5月6日（水・振休）" },

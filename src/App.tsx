@@ -104,10 +104,7 @@ body {
   }
 }
 
-.text-pretty {
-  text-wrap: pretty;
-}
-
+.text-pretty { text-wrap: pretty; }
 .link-btn { transition: opacity 150ms ease-out; }
 .link-btn:hover { opacity: 0.78; }
 
@@ -125,21 +122,95 @@ body {
 .exchange-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; }
 @media (min-width: 900px) { .exchange-grid { grid-template-columns: minmax(0,1.2fr) minmax(280px,0.8fr); } }
 
-.menu-row { display: grid; grid-template-columns: 1fr; gap: 2rem; padding-bottom: 3.5rem; margin-bottom: 3.5rem; border-bottom: 1px solid var(--border); }
-@media (min-width: 768px) { .menu-row { grid-template-columns: minmax(0, 1fr) minmax(0, 2.5fr); gap: 3rem; } }
+/* ─── Menu Section Layout (Refactored) ─── */
+.menu-row { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 1.5rem; 
+  padding-bottom: 3.5rem; 
+  margin-bottom: 3.5rem; 
+  border-bottom: 1px solid var(--border); 
+}
+@media (min-width: 768px) { 
+  .menu-row { 
+    flex-direction: row; 
+    align-items: flex-start; 
+    gap: 3rem; 
+  }
+  .menu-row-text { 
+    flex: 1; 
+    min-width: 250px; 
+    position: sticky; /* PCではテキストを追従させる */
+    top: 5rem; 
+  }
+  .menu-row-visuals { 
+    flex: 2.2; 
+    min-width: 0; /* Flexboxのはみ出し防止 */
+  }
+}
 
-/* 写真のグリッド設定（スマホ時は1列、PC時は3列） */
-.menu-images { display: grid; grid-template-columns: 1fr; gap: 1rem; }
-@media (min-width: 640px) { .menu-images { grid-template-columns: repeat(3, 1fr); } }
+/* モバイル: 横スクロールカルーセル / PC: 3列グリッド */
+.menu-images { 
+  display: flex; 
+  gap: 1rem; 
+  overflow-x: auto; 
+  scroll-snap-type: x mandatory; 
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+  /* コンテナのpaddingを打ち消して画面端までスワイプ可能に */
+  margin: 0 calc(-1 * clamp(1.5rem, 5vw, 4rem));
+  padding: 0 clamp(1.5rem, 5vw, 4rem) 1rem clamp(1.5rem, 5vw, 4rem);
+}
+.menu-images::-webkit-scrollbar { display: none; /* Chrome/Safari */ }
+.menu-images > * { 
+  /* モバイル時は次の画像が少し見える幅に設定 */
+  flex: 0 0 calc(85vw - clamp(1.5rem, 5vw, 4rem)); 
+  max-width: 320px;
+  scroll-snap-align: center; 
+}
 
-.aspect-portrait { aspect-ratio: 2 / 3; background: rgba(0,0,0,0.03); border: 1px solid var(--border); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; font-size: 0.8125rem; color: var(--muted); overflow: hidden; }
-.aspect-square { aspect-ratio: 1 / 1; background: var(--card); border: 1px solid var(--border); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; color: var(--muted); overflow: hidden; }
+@media (min-width: 640px) { 
+  .menu-images { 
+    display: grid; 
+    grid-template-columns: repeat(3, 1fr); 
+    overflow-x: visible; 
+    margin: 0; 
+    padding: 0; 
+  }
+  .menu-images > * { 
+    flex: auto; 
+    max-width: none; 
+  }
+}
+
+/* 画像ラッパーとホバーアニメーション */
+.img-wrapper {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  background: rgba(0,0,0,0.03);
+  isolation: isolate; /* Safariの角丸バグ防止 */
+}
+.img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s cubic-bezier(0.33, 1, 0.68, 1);
+}
+@media (hover: hover) {
+  .img-wrapper:hover img { transform: scale(1.04); }
+}
+
+.aspect-portrait { aspect-ratio: 2 / 3; }
+.aspect-square { aspect-ratio: 1 / 1; }
 
 .canvas-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
 @media (min-width: 640px) { .canvas-grid { grid-template-columns: repeat(4, 1fr); } }
 `;
 
-// ─── Icons ────────────────────────────────────────────────────────────────────
+// ─── Icons ───
 const IconArrow = () => (
   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
     <path d="M7 17L17 7M17 7H7M17 7v10" />
@@ -162,18 +233,16 @@ const IconInfo = () => (
   </svg>
 );
 
-// ─── Primitives ───────────────────────────────────────────────────────────────
-const Tag = ({ children }: { children: React.ReactNode }) => (
+// ─── Primitives ───
+const Tag = ({ children }) => (
   <span style={{ display: "inline-flex", alignItems: "center", padding: "3px 12px", borderRadius: "999px", fontSize: "11px", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", background: "var(--sage-bg)", color: "var(--sage)", border: "1px solid var(--sage-border)" }}>
     {children}
   </span>
 );
 
-const Rule = () => (
-  <div aria-hidden="true" style={{ height: "1px", background: "var(--border)", margin: "1.5rem 0 0" }} />
-);
+const Rule = () => <div aria-hidden="true" style={{ height: "1px", background: "var(--border)", margin: "1.5rem 0 0" }} />;
 
-const SectionHead = ({ eyebrow, title, id }: { eyebrow: string; title: string; id: string }) => (
+const SectionHead = ({ eyebrow, title, id }) => (
   <div style={{ marginBottom: "2.5rem" }}>
     <Tag>{eyebrow}</Tag>
     <h2 id={id} style={{ marginTop: "0.75rem", fontFamily: "var(--font-display)", fontWeight: 400, fontSize: "clamp(1.75rem, 4vw, 2.5rem)", lineHeight: 1.15, color: "var(--ink)", wordBreak: "keep-all", overflowWrap: "anywhere" }}>
@@ -183,13 +252,13 @@ const SectionHead = ({ eyebrow, title, id }: { eyebrow: string; title: string; i
   </div>
 );
 
-const Card = ({ children, style, className }: { children: React.ReactNode; style?: React.CSSProperties; className?: string }) => (
+const Card = ({ children, style, className }) => (
   <div className={className} style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: "1.5rem", boxShadow: "0 1px 12px rgba(0,0,0,0.05)", ...style }}>
     {children}
   </div>
 );
 
-// ─── Nav ──────────────────────────────────────────────────────────────────────
+// ─── Nav ───
 const Nav = () => (
   <nav aria-label="サイトナビゲーション" className="nav-blur" style={{ position: "sticky", top: 0, zIndex: 40, display: "flex", alignItems: "center", justifyItems: "center", justifyContent: "space-between", padding: "0 clamp(1.5rem, 5vw, 4rem)", height: "3.25rem", background: "rgba(247,245,240,0.88)", borderBottom: "1px solid var(--border)" }}>
     <span style={{ fontFamily: "var(--font-display)", fontSize: "1rem", color: "var(--ink)", letterSpacing: "0.01em" }}>mosslet</span>
@@ -197,7 +266,7 @@ const Nav = () => (
   </nav>
 );
 
-// ─── Hero ─────────────────────────────────────────────────────────────────────
+// ─── Hero ───
 const Hero = () => (
   <header style={{ background: "var(--bg)", overflow: "hidden", position: "relative" }}>
     <div aria-hidden="true" style={{ position: "absolute", top: 0, right: 0, width: "min(560px, 80vw)", height: "min(560px, 80vw)", background: "radial-gradient(circle at 65% 25%, rgba(58,97,68,0.08) 0%, transparent 70%)", pointerEvents: "none" }} />
@@ -229,7 +298,7 @@ const Hero = () => (
   </header>
 );
 
-// ─── Menu ─────────────────────────────────────────────────────────────────────
+// ─── Menu (Refactored) ───
 const MenuSection = () => (
   <section aria-labelledby="menu-heading" style={{ background: "var(--bg-alt)", padding: "clamp(4rem, 8vw, 7rem) clamp(1.5rem, 5vw, 4rem)", borderTop: "1px solid var(--border)" }}>
     <div style={{ maxWidth: "72rem", margin: "0 auto" }}>
@@ -243,7 +312,7 @@ const MenuSection = () => (
       <div>
         {MENU_ITEMS.map((item, index) => (
           <div key={index} className="menu-row">
-            <div>
+            <div className="menu-row-text">
               <h4 style={{ fontSize: "1.125rem", fontWeight: 600, color: "var(--ink)", marginBottom: "0.25rem" }}>{item.title}</h4>
               <p style={{ fontSize: "0.6875rem", fontWeight: 600, color: "var(--muted)", letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: "1rem" }}>{item.subtitle}</p>
               
@@ -257,13 +326,13 @@ const MenuSection = () => (
                 {item.desc}
               </p>
             </div>
-            <div className="menu-images">
+            <div className="menu-row-visuals menu-images">
               {item.images.map((img, i) => (
-                <div key={i} className="aspect-portrait">
+                <div key={i} className="img-wrapper aspect-portrait">
                   <img 
                     src={img} 
-                    alt="" 
-                    style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} 
+                    alt={`${item.title} の作品画像 ${i + 1}`} 
+                    loading="lazy" 
                   />
                 </div>
               ))}
@@ -273,7 +342,7 @@ const MenuSection = () => (
 
         <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: "1.5rem", padding: "clamp(1.5rem, 4vw, 2.5rem)" }}>
           <div className="menu-row" style={{ borderBottom: "none", paddingBottom: 0, marginBottom: 0 }}>
-            <div>
+            <div className="menu-row-text">
               <h4 style={{ fontSize: "1.125rem", fontWeight: 600, color: "var(--ink)", marginBottom: "0.5rem" }}>Fragments of a Printing Study</h4>
               <p className="text-pretty" style={{ fontSize: "0.875rem", lineHeight: 1.85, color: "var(--body)", marginBottom: "1rem" }}>
                 UV印刷によるキャンバス作品。<br />下地や発色の違いを試しながら、表現の可能性を探りました。
@@ -282,19 +351,16 @@ const MenuSection = () => (
                 ※展示のみ
               </span>
             </div>
-            <div className="canvas-grid">
-              <div className="aspect-square">
-                <img src="/images/5-01.png" alt="Canvas 1" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
-              </div>
-              <div className="aspect-square">
-                <img src="/images/5-02.png" alt="Canvas 2" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
-              </div>
-              <div className="aspect-square">
-                <img src="/images/5-03.png" alt="Canvas 3" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
-              </div>
-              <div className="aspect-square">
-                <img src="/images/5-04.png" alt="Canvas 4" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
-              </div>
+            <div className="menu-row-visuals canvas-grid">
+              {[1, 2, 3, 4].map((num) => (
+                <div key={num} className="img-wrapper aspect-square">
+                  <img 
+                    src={`/images/5-0${num}.png`} 
+                    alt={`キャンバス作品 ${num}`} 
+                    loading="lazy" 
+                  />
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -303,7 +369,7 @@ const MenuSection = () => (
   </section>
 );
 
-// ─── Purchase ─────────────────────────────────────────────────────────────────
+// ─── Purchase ───
 const PurchaseSection = () => (
   <section aria-labelledby="purchase-heading" style={{ background: "var(--bg)", padding: "clamp(4rem, 8vw, 7rem) clamp(1.5rem, 5vw, 4rem)" }}>
     <div style={{ maxWidth: "72rem", margin: "0 auto" }}>
@@ -335,7 +401,7 @@ const PurchaseSection = () => (
   </section>
 );
 
-// ─── Exchange ─────────────────────────────────────────────────────────────────
+// ─── Exchange ───
 const ExchangeSection = () => (
   <section aria-labelledby="exchange-heading" style={{ background: "var(--bg-alt)", padding: "clamp(4rem, 8vw, 7rem) clamp(1.5rem, 5vw, 4rem)" }}>
     <div style={{ maxWidth: "72rem", margin: "0 auto" }}>
@@ -408,7 +474,7 @@ const ExchangeSection = () => (
   </section>
 );
 
-// ─── Notices ──────────────────────────────────────────────────────────────────
+// ─── Notices ───
 const NoticesSection = () => (
   <section aria-labelledby="notice-heading" style={{ background: "var(--bg)", padding: "clamp(4rem, 8vw, 7rem) clamp(1.5rem, 5vw, 4rem)" }}>
     <div style={{ maxWidth: "72rem", margin: "0 auto" }}>
@@ -428,7 +494,7 @@ const NoticesSection = () => (
   </section>
 );
 
-// ─── Footer ───────────────────────────────────────────────────────────────────
+// ─── Footer ───
 const Footer = () => (
   <footer style={{ background: "var(--ink)", color: "rgba(247,245,240,0.9)", padding: "clamp(3.5rem, 7vw, 5.5rem) clamp(1.5rem, 5vw, 4rem)" }}>
     <div style={{ maxWidth: "72rem", margin: "0 auto" }}>
@@ -475,7 +541,7 @@ const Footer = () => (
   </footer>
 );
 
-// ─── App ──────────────────────────────────────────────────────────────────────
+// ─── App ───
 export default function App() {
   return (
     <>
